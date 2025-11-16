@@ -21,7 +21,7 @@ def fibonacci(n: int) -> int:
 
 
 def count_vowels(text: str) -> int:
-    vowels = {'a', 'e', 'i', 'o', 'u', 'y'}
+    vowels = {'a', 'e', 'i', 'o', 'u', 'y', 'ą', 'ę', 'ó'}
     return sum(1 for char in text.lower() if char in vowels)
 
 

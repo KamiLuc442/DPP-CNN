@@ -1,4 +1,4 @@
-from utils.utils import is_palindrome, fibonacci
+from utils.utils import is_palindrome, fibonacci, count_vowels
 import pytest
 
 
@@ -37,3 +37,21 @@ class TestFibonacci:
     def test_fibonacci_negative(self):
         with pytest.raises(ValueError):
             fibonacci(-1)
+
+
+class TestCountVowels:
+
+    def test_python(self):
+        assert count_vowels("Python") == 2
+
+    def test_aeiouy(self):
+        assert count_vowels("AEIOUY") == 6
+
+    def test_bcd(self):
+        assert count_vowels("bcd") == 0
+
+    def test_empty_string(self):
+        assert count_vowels("") == 0
+
+    def test_polish_text(self):
+        assert count_vowels("Próba żółwia") == 5
