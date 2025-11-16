@@ -1,4 +1,4 @@
-from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount, flatten_list
+from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount, flatten_list, word_frequencies
 import pytest
 
 
@@ -93,3 +93,22 @@ class TestFlattenList:
 
     def test_progressively_nested(self):
         assert flatten_list([1, [2, [3, [4]]]]) == [1, 2, 3, 4]
+
+
+class TestWordFrequencies:
+
+    def test_to_be_or_not_to_be(self):
+        assert word_frequencies("To be or not to be") == {"to": 2, "be": 2, "or": 1, "not": 1}
+
+    def test_hello_with_punctuation(self):
+        assert word_frequencies("Hello, hello!") == {"hello": 2}
+
+    def test_empty_string(self):
+        assert word_frequencies("") == {}
+
+    def test_python_case_insensitive(self):
+        assert word_frequencies("Python Python python") == {"python": 3}
+
+    def test_polish_text_with_punctuation(self):
+        result = word_frequencies("Ala ma kota, a kot ma Ale.")
+        assert result == {"ala": 1, "ma": 2, "kota": 1, "a": 1, "kot": 1, "ale": 1}
