@@ -1,4 +1,4 @@
-from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount, flatten_list, word_frequencies
+from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount, flatten_list, word_frequencies, is_prime
 import pytest
 
 
@@ -112,3 +112,27 @@ class TestWordFrequencies:
     def test_polish_text_with_punctuation(self):
         result = word_frequencies("Ala ma kota, a kot ma Ale.")
         assert result == {"ala": 1, "ma": 2, "kota": 1, "a": 1, "kot": 1, "ale": 1}
+
+
+class TestIsPrime:
+
+    def test_prime_2(self):
+        assert is_prime(2) is True
+
+    def test_prime_3(self):
+        assert is_prime(3) is True
+
+    def test_not_prime_4(self):
+        assert is_prime(4) is False
+
+    def test_not_prime_0(self):
+        assert is_prime(0) is False
+
+    def test_not_prime_1(self):
+        assert is_prime(1) is False
+
+    def test_prime_5(self):
+        assert is_prime(5) is True
+
+    def test_prime_97(self):
+        assert is_prime(97) is True
