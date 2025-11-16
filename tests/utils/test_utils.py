@@ -1,4 +1,4 @@
-from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount
+from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount, flatten_list
 import pytest
 
 
@@ -75,3 +75,21 @@ class TestCalculateDiscount:
     def test_discount_over_one(self):
         with pytest.raises(ValueError):
             calculate_discount(100, 1.5)
+
+
+class TestFlattenList:
+
+    def test_already_flat(self):
+        assert flatten_list([1, 2, 3]) == [1, 2, 3]
+
+    def test_nested_lists(self):
+        assert flatten_list([1, [2, 3], [4, [5]]]) == [1, 2, 3, 4, 5]
+
+    def test_empty_list(self):
+        assert flatten_list([]) == []
+
+    def test_deeply_nested(self):
+        assert flatten_list([[[1]]]) == [1]
+
+    def test_progressively_nested(self):
+        assert flatten_list([1, [2, [3, [4]]]]) == [1, 2, 3, 4]
