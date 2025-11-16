@@ -1,4 +1,5 @@
-from utils.utils import is_palindrome
+from utils.utils import is_palindrome, fibonacci
+import pytest
 
 
 class TestIsPalindrome:
@@ -18,3 +19,21 @@ class TestIsPalindrome:
     def test_single_character(self):
         assert is_palindrome("A") is True
 
+
+class TestFibonacci:
+
+    def test_fibonacci_0(self):
+        assert fibonacci(0) == 0
+
+    def test_fibonacci_1(self):
+        assert fibonacci(1) == 1
+
+    def test_fibonacci_5(self):
+        assert fibonacci(5) == 5
+
+    def test_fibonacci_10(self):
+        assert fibonacci(10) == 55
+
+    def test_fibonacci_negative(self):
+        with pytest.raises(ValueError):
+            fibonacci(-1)
