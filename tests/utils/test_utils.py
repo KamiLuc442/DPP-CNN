@@ -1,4 +1,4 @@
-from utils.utils import is_palindrome, fibonacci, count_vowels
+from utils.utils import is_palindrome, fibonacci, count_vowels, calculate_discount
 import pytest
 
 
@@ -55,3 +55,23 @@ class TestCountVowels:
 
     def test_polish_text(self):
         assert count_vowels("Próba żółwia") == 5
+
+
+class TestCalculateDiscount:
+
+    def test_discount_20_percent(self):
+        assert calculate_discount(100, 0.2) == 80.0
+
+    def test_discount_zero(self):
+        assert calculate_discount(50, 0) == 50.0
+
+    def test_discount_full(self):
+        assert calculate_discount(200, 1) == 0.0
+
+    def test_discount_negative(self):
+        with pytest.raises(ValueError):
+            calculate_discount(100, -0.1)
+
+    def test_discount_over_one(self):
+        with pytest.raises(ValueError):
+            calculate_discount(100, 1.5)
