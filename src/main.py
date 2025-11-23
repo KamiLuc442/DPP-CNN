@@ -1,37 +1,13 @@
 from fastapi import FastAPI
-from .movies import load_movies, load_links, load_ratings, load_tags
+from .movies.router import router as movies_router
+from .links.router import router as links_router
+from .ratings.router import router as ratings_router
+from .tags.router import router as tags_router
+from .auth.router import router as auth_router
 
 app = FastAPI()
-
-
-def orm_to_dict(obj):
-    return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
-
-
-@app.get("/")
-async def root():
-    return {"hello": "world"}
-
-
-@app.get("/movies")
-async def get_movies():
-    movies = load_movies()
-    return [orm_to_dict(movie) for movie in movies]
-
-
-@app.get("/links")
-async def get_links():
-    links = load_links()
-    return [orm_to_dict(link) for link in links]
-
-
-@app.get("/ratings")
-async def get_ratings():
-    ratings = load_ratings()
-    return [orm_to_dict(rating) for rating in ratings]
-
-
-@app.get("/tags")
-async def get_tags():
-    tags = load_tags()
-    return [orm_to_dict(tag) for tag in tags]
+app.include_router(movies_router)
+app.include_router(links_router)
+app.include_router(ratings_router)
+app.include_router(tags_router)
+app.include_router(auth_router)
