@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY
+from src.database import Base
 
-Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'users'
@@ -9,6 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     login = Column(String, unique=True, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
+    roles = Column(JSON, default=['ROLE_USER'])
 
 
 class Movie(Base):

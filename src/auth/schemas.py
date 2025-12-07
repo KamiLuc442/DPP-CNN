@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 
 class UserBase(BaseModel):
     login: str = Field(..., min_length=3, max_length=50)
@@ -6,10 +7,12 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6)
+    roles: List[str] = Field(default=['ROLE_USER'])
 
 
 class UserResponse(UserBase):
     id: int
+    roles: List[str]
 
     class Config:
         from_attributes = True
