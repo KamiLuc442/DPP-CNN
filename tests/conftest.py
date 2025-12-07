@@ -1,55 +1,47 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from src.database import Base, get_session
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.pool import StaticPool
+from src.database import get_session, Base
 from src.main import app
-from src.models import *
-
+from src.models import User, Movie, Link, Rating, Tag
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
+
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def override_get_session():
+@pytest.fixture(scope="function")
+def db_session():
+    Base.metadata.create_all(bind=engine)
+    
     session = TestingSessionLocal()
+    
     try:
         yield session
     finally:
         session.close()
-
-app.dependency_overrides[get_session] = override_get_session
-
-
-@pytest.fixture(scope="session", autouse=True)
-def create_test_db():
-    Base.metadata.create_all(bind=engine)
-    yield
-    Base.metadata.drop_all(bind=engine)
+        Base.metadata.drop_all(bind=engine)
 
 
-@pytest.fixture()
-def client():
-    with TestClient(app) as c:
-        yield c
-
-
-@pytest.fixture()
-def sample_movies():
-    session = TestingSessionLocal()
-    movies = [
-        Movie(title="Movie 1", genres="Action"),
-        Movie(title="Movie 2", genres="Comedy"),
-        Movie(title="Movie 3", genres="Drama")
-    ]
-    session.add_all(movies)
-    session.commit()
-
-    for m in movies:
-        session.refresh(m)
-    yield movies
-
-    for m in movies:
-        session.delete(m)
-    session.commit()
+@pytest.fixture(scope="function")
+def client(db_session: Session):
+    def override_get_session():
+        try:
+            yield db_session
+        finally:
+            pass
+    
+    app.dependency_overrides[get_session] = override_get_session
+    
+    with TestClient(app) as test_client:
+        yield test_client
+    
+    app.dependency_overrides.clear()
